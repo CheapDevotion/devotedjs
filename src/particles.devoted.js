@@ -22,17 +22,17 @@ Devoted.Particles.ParticleSystem = function (){
 	this.drag = 0.97;
 	this.wind = 50;
 
-	this.accelerationf = function(force){
-		return function(particle, td){
-			particle.velocity.iadd(force.muls(td));
-		};
-	};
+	this.draw = function(ctx){
+		if (ctx == null) { var ctx = Devoted.Render.context; }
+		for(var i = 0; i < this.particles.length; i++) {
+			var particle = this.particles[i];
+			ctx.save();
+			ctx.translate(particle.position.x, particle.position.y);
+			ctx.drawImage(particle.image, -particle.image.width/2, -particle.image.height/2);
+			ctx.restore();
+		}
+	}
 
-	this.dampingf = function(damping){
-		return function(particle, td){
-			particle.velocity.imuls(damping);
-		};
-	};
 
 	this.applyWind = function(particle, td){
 		particle.velocity.x += td*Math.random()*this.wind;
