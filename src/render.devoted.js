@@ -2,7 +2,6 @@ Devoted.Render = Devoted.Render || {};
 
 Devoted.Render.canvas, Devoted.Render.context;
 
-Devoted.Render.test = "test";
 
 (function() {
     var lastTime = 0;
