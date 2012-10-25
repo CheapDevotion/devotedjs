@@ -1,5 +1,6 @@
 Devoted.Particles = Devoted.Particles || {};
 
+
 Devoted.Particles.Particle = function(position, velocity){
 	this.position = position;
 	this.velocity = velocity;
@@ -9,3 +10,37 @@ Devoted.Particles.Particle = function(position, velocity){
 		this.particle.position.iadd(this.particle.velocity.muls(td));
 	}
 }
+
+Devoted.Particles.ParticleSystem = function (){
+	this.particles = [];
+	this.gravity = 10;
+	this.drag = 0.97;
+	this.wind = 50;
+
+}
+
+Devoted.Particles.ParticleEmitter = function(config){
+	
+	this.system = config.system || new this.ParticleSystem();
+	this.oneShot = config.oneShot || true;
+	this.size = config.size || new Devoted.Math.Vector2(100,100);
+	this.velocity = config.velocity || 100;
+	this.randomScale = config.randomScale || false;
+
+
+
+
+	this.emit = function(total){
+		var position = Devoted.Math.Vector2(Math.random()*size.x, Math.random()*size.y);
+		for (var i = 0; i < total; i++){
+			var particle = new this.Particle(position.copy());
+			var alpha = Devoted.Math.Fuzzy(Math.PI);
+			var radius = Math.random() * this.velocity;
+			particle.velocity.x = Math.cos(alpha)*radius;
+			particle.velocity.y = Math.sin(alpha)*radius;
+
+
+		}
+	}
+}
+
