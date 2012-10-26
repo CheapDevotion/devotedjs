@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>DevotedJS | Particles</title>
+	<script src="../src/core.devoted.js" type="text/javascript"></script>
+	<script src="../src/math.devoted.js" type="text/javascript"></script>
+	<script src="../src/render.devoted.js" type="text/javascript"></script>
+	<script src="../src/particles.devoted.js" type="text/javascript"></script>
+
+	
+</head>
+
+<body>
+	<canvas id="particles"></canvas>
+	<p style="position:absolute;top:0px;left:0px" id="fps"></p>
+</body>
+</html>
+
+<script type="text/javascript">
+		Devoted.Render.Init({container: "particles", width:screen.width, height: screen.height});
+		Devoted.Render.ShowFPS("fps");
+
+		var pSystem;
+		var pEmitter;
+		var spark = new Image();
+		spark.src = "img/particle.png";
+		spark.onload = start;
+
+		function start(){
+			pSystem = new Devoted.Particles.ParticleSystem({
+				gravity:200,
+				wind:0,
+				drag:0.99,
+			});
+			pEmitter = new Devoted.Particles.ParticleEmitter({system : pSystem});
+			pSystem.images.push(spark);
+			update();
+			setInterval(function(){
+				var total = document.getElementById("fps");
+				total.innerHTML += "<br />Particles: " + pSystem.particles.length;
+			},1000);
+		}
+
+		function update(){
+			pEmitter.position = new Devoted.Math.Vector2(Devoted.Math.RandomRange(20,screen.width - 20), Devoted.Math.RandomRange(20,screen.height - 20));
+			pSystem.update(Devoted.Render.deltaTime);
+			Devoted.Render.Draw(update);
+			if (Math.random() < 0.1){
+				pEmitter.emit(100);
+			}
+		}
+		
+		
+
+		
+
+
+
+	</script>	

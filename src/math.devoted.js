@@ -17,6 +17,13 @@ Devoted.Math.Vector2.prototype = {
 	set: function(x, y) {this.x = x; this.y = y;} 
 };
 
+Devoted.Math.Rect = function (x, y, width, height){
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+}
+
 Devoted.Math.Fuzzy = function (range, base){
 	return (base||0) + (Math.random()-0.5)*range*2;
 };

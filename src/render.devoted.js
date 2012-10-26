@@ -1,6 +1,9 @@
 Devoted.Render = Devoted.Render || {};
 
-Devoted.Render.canvas, Devoted.Render.context;
+Devoted.Render.canvas, Devoted.Render.context, Devoted.Render.deltaTime, Devoted.Render.dirtyRects = [];
+
+var filterStrength = 20;
+var frameTime = 0, lastLoop = new Date, thisLoop;
 
 
 (function() {
@@ -52,6 +55,24 @@ Devoted.Render.Clear = function(){
 };
 
 Devoted.Render.Draw = function(method){
-    Devoted.Render.Clear();
-    Devoted.Render.Update(method);
+    Devoted.Render.Update(function (){
+		var thisFrameTime = (thisLoop = new Date()) - lastLoop;
+		Devoted.Render.deltaTime = thisFrameTime / 1000;
+		frameTime+= (thisFrameTime - frameTime) / filterStrength;
+		lastLoop = thisLoop;
+		Devoted.Render.Clear();
+		method();
+	});
+}
+
+Devoted.Render.Invalidate(rect){
+	this.dirtyRects.push(rect);
+}
+
+Devoted.Render.ShowFPS = function(container){
+	// Report the fps only every second, to only lightly affect measurements
+	var fpsOut = document.getElementById(container);
+	setInterval(function(){
+	  fpsOut.innerHTML = "FPS: " + (1000/frameTime).toFixed(1);
+	},1000);
 }
