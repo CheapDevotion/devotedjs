@@ -19,7 +19,7 @@
 </html>
 
 <script type="text/javascript">
-		Devoted.Render.Init({container: "particles", width:screen.width, height: screen.height});
+		Devoted.Render.Init({container: "particles", width:screen.width, height: screen.height, frameRate: 60});
 		Devoted.Render.ShowFPS("fps");
 
 		var pSystem;
@@ -30,11 +30,15 @@
 
 		function start(){
 			pSystem = new Devoted.Particles.ParticleSystem({
-				gravity:200,
+				gravity:-1000,
 				wind:0,
-				drag:0.99,
+				drag:0,
 			});
-			pEmitter = new Devoted.Particles.ParticleEmitter({system : pSystem});
+			pEmitter = new Devoted.Particles.ParticleEmitter({
+				system : pSystem,
+				minEnergy: 0.1,
+				maxEnergy:0.3,
+			});
 			pSystem.images.push(spark);
 			update();
 			setInterval(function(){
@@ -44,12 +48,11 @@
 		}
 
 		function update(){
-			pEmitter.position = new Devoted.Math.Vector2(Devoted.Math.RandomRange(20,screen.width - 20), Devoted.Math.RandomRange(20,screen.height - 20));
+			//pEmitter.position = new Devoted.Math.Vector2(Devoted.Math.RandomRange(20,screen.width - 20), Devoted.Math.RandomRange(20,screen.height - 20));
+			pEmitter.position = new Devoted.Math.Vector2(screen.width/2,100);
 			pSystem.update(Devoted.Render.deltaTime);
 			Devoted.Render.Draw(update);
-			if (Math.random() < 0.1){
-				pEmitter.emit(100);
-			}
+				pEmitter.emit(40);
 		}
 		
 		

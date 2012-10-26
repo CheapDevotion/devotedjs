@@ -1,6 +1,6 @@
 Devoted.Render = Devoted.Render || {};
 
-Devoted.Render.canvas, Devoted.Render.context, Devoted.Render.deltaTime, Devoted.Render.dirtyRects = [];
+Devoted.Render.frameRate, Devoted.Render.canvas, Devoted.Render.context, Devoted.Render.deltaTime, Devoted.Render.dirtyRects = [];
 
 var filterStrength = 20;
 var frameTime = 0, lastLoop = new Date, thisLoop;
@@ -36,6 +36,7 @@ Devoted.Render.Init = function(config){
 	this.container = config.container || "container";
 	this.width = config.width || 400;
 	this.height = config.height || 400;
+    this.frameRate = config.frameRate || 60;
 	
 	this.canvas = document.getElementById(this.container);
 	this.canvas.width = this.width;
@@ -46,12 +47,15 @@ Devoted.Render.Init = function(config){
 };
 
 Devoted.Render.Update = function(method){
-	requestAnimationFrame(method);
+    setTimeout(function(){
+	   requestAnimationFrame(method);
+    }, 1000/this.frameRate);
 }
 
 Devoted.Render.Clear = function(){
-	this.canvas.width = this.canvas.width;
-	this.canvas.height = this.canvas.height;
+    var canvas = Devoted.Render.canvas;
+    var context = Devoted.Render.context;
+    context.clearRect(0,0,canvas.width,canvas.height);
 };
 
 Devoted.Render.Draw = function(method){
@@ -65,7 +69,7 @@ Devoted.Render.Draw = function(method){
 	});
 }
 
-Devoted.Render.Invalidate(rect){
+Devoted.Render.Invalidate = function(rect){
 	this.dirtyRects.push(rect);
 }
 

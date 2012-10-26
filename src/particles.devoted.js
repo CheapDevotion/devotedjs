@@ -1,5 +1,5 @@
 Devoted.Particles = Devoted.Particles || {};
-var useBuffer = true;
+var useBuffer = false;
 
 Devoted.Particles.Particle = function(position){
 	this.position = position;
@@ -55,8 +55,10 @@ Devoted.Particles.ParticleSystem = function (config){
 			ctx.globalCompositeOperation = 'source-over';
 			ctx.restore();	
 		}
-		if (useBuffer)
-			Devoted.Render.context.drawImage(this.buffer,0,0);
+		if (useBuffer){
+			var data = ctx.getImageData(0,0, this.buffer.width, this.buffer.height);
+			Devoted.Render.context.putImageData(data,0,0);
+		}
 	}
 
 	this.tick = function(td){
