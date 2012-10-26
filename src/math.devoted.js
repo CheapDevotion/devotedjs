@@ -13,6 +13,7 @@ Devoted.Math.Vector2.prototype = {
 	add: function(v) { return new Devoted.Math.Vector2(this.x+v.x, this.y+v.y); }, iadd: function(v) { this.x+=v.x; this.y+=v.y; return this;},
 	subs: function(n) { return new Devoted.Math.Vector2(this.x-n, this.y-n); }, isubs: function(s) { this.x-=s; this.y-=s; return this;},
 	sub: function(v) { return new Devoted.Math.Vector2(this.x-v.x, this.y-v.y); }, isub: function(v) { this.x-=v.x; this.y-=v.y; return this;},
+	copy: function() {return new Devoted.Math.Vector2(this.x, this.y);},
 	set: function(x, y) {this.x = x; this.y = y;} 
 };
 

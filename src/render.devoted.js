@@ -29,6 +29,7 @@ Devoted.Render.canvas, Devoted.Render.context;
 }())
 
 Devoted.Render.Init = function(config){
+    config = config || {};
 	this.container = config.container || "container";
 	this.width = config.width || 400;
 	this.height = config.height || 400;
@@ -49,3 +50,8 @@ Devoted.Render.Clear = function(){
 	this.canvas.width = this.canvas.width;
 	this.canvas.height = this.canvas.height;
 };
+
+Devoted.Render.Draw = function(method){
+    Devoted.Render.Clear();
+    Devoted.Render.Update(method);
+}

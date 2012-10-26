@@ -1,26 +1,34 @@
 Devoted.Particles = Devoted.Particles || {};
 
 
-Devoted.Particles.Particle = function(position, velocity){
+Devoted.Particles.Particle = function(position){
 	this.position = position;
-	this.velocity = velocity;
+	this.velocity =  new Devoted.Math.Vector2(0,0);
 	this.image = null;
 	this.age = 0;
 	this.mass = 1;
+	this.maxAge = Infinity;
 	
-	update = function(td){
+	this.update = function(td){
 		this.age += td;
+		console.log(this.position.x, this.position.y);
 		this.position.iadd(this.velocity.muls(td));
+
 		return this.age < this.maxAge;
 	}
 }
 
-Devoted.Particles.ParticleSystem = function (){
+Devoted.Particles.ParticleSystem = function (config){
+	config = config || {};
+	this.gravity = config.gravity || 10;
+	this.drag = config.gravity || 0.97;
+	this.wind = config.gravity || 50;
+
 	this.particles = [];
 	this.images = [];
-	this.gravity = 10;
-	this.drag = 0.97;
-	this.wind = 50;
+
+	var applyGravity = accelerationf(new Devoted.Math.Vector2(0, this.gravity));
+	var applyDamping = dampingf(this.drag);
 
 	this.draw = function(ctx){
 		if (ctx == null) { var ctx = Devoted.Render.context; }
@@ -33,22 +41,13 @@ Devoted.Particles.ParticleSystem = function (){
 		}
 	}
 
-
-	this.applyWind = function(particle, td){
-		particle.velocity.x += td*Math.random()*this.wind;
-	};
-
-	this.applyGravity = accelerationf(new Devoted.Math.Vector2(0, gravity));
-	this.applyDamping = dampingf(this.drag);
-
-
-	this.update = function(td){
+	this.tick = function(td){
 		var alive = [];
 		for (var i = 0; i < this.particles.length; i++){
 			var particle = this.particles[i];
-			this.applyGravity(particle, td);
-			this.applyDamping(particle, td);
-			this.applyWind(particle, td);
+			applyGravity(particle, td);
+			applyDamping(particle, td);
+			applyWind(particle, td);
 
 			if (particle.update(td)){
 				alive.push(particle);
@@ -57,29 +56,58 @@ Devoted.Particles.ParticleSystem = function (){
 		this.particles = alive;
 	};
 
+	this.update = function(td){
+		this.tick(td);
+		this.draw();
+	}
+
+
+	function accelerationf (force){
+		return function(particle, td){
+			particle.velocity.iadd(force.muls(td));
+		};
+	};
+
+	function dampingf (damping){
+		return function(particle, td){
+			particle.velocity.imuls(damping);
+		};
+	};
+	function applyWind(particle, td){
+		particle.velocity.x += td*Math.random()*this.wind;
+	};
+
+
+
+
+	
+
 }
 
 Devoted.Particles.ParticleEmitter = function(config){
-	
+	config = config || {};
 	this.system = config.system || new this.ParticleSystem();
 	this.oneShot = config.oneShot || true;
-	this.size = config.size || new Devoted.Math.Vector2(100,100);
+	this.size = config.size || new Devoted.Math.Vector2(400,400);
 	this.velocity = config.velocity || 100;
 	this.randomScale = config.randomScale || false;
+	this.minEnergy = config.minEnergy || 0.5;
+	this.maxEnergy = config.maxEnergy || 2.0;
 
 
 
 
 	this.emit = function(total){
-		var position = Devoted.Math.Vector2(Math.random()*size.x, Math.random()*size.y);
+		var position = new Devoted.Math.Vector2(Math.random()*this.size.x, Math.random()*this.size.y);
 		for (var i = 0; i < total; i++){
-			var particle = new this.Particle(position.copy());
+			var particle = new Devoted.Particles.Particle(position.copy());
 			var alpha = Devoted.Math.Fuzzy(Math.PI);
 			var radius = Math.random() * this.velocity;
 			particle.velocity.x = Math.cos(alpha)*radius;
 			particle.velocity.y = Math.sin(alpha)*radius;
-			particle.image = Devoted.Math.RandomArray(system.images);
-
+			particle.image = Devoted.Math.RandomArray(this.system.images);
+			particle.maxAge = Devoted.Math.Fuzzy(this.minEnergy, this.maxEnergy);
+			this.system.particles.push(particle);
 
 		}
 	}

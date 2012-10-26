@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>DevotedJS | Particles</title>
+	<script src="../src/core.devoted.js" type="text/javascript"></script>
+	<script src="../src/math.devoted.js" type="text/javascript"></script>
+	<script src="../src/render.devoted.js" type="text/javascript"></script>
+	<script src="../src/particles.devoted.js" type="text/javascript"></script>
+
+	
+</head>
+
+<body>
+	<canvas id="particles"></canvas>
+	<button onclick="emit()">Emit Particles</emit>
+</body>
+</html>
+
+<script type="text/javascript">
+		Devoted.Render.Init({container: "particles"});
+
+		var pSystem;
+		var pEmitter;
+		var spark = new Image();
+		spark.src = "img/spark.png";
+		spark.onload = start;
+
+		function start(){
+			pSystem = new Devoted.Particles.ParticleSystem();
+			pEmitter = new Devoted.Particles.ParticleEmitter({system : pSystem});
+			pSystem.images.push(spark);
+			update();
+		}
+
+		function update(){
+			pSystem.update(1 / 200);
+			Devoted.Render.Draw(update);
+		}
+
+		function emit(){
+			pEmitter.emit(1);
+		}
+
+		
+
+
+
+	</script>	
