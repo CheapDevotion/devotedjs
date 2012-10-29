@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>DevotedJS | Sprites</title>
+	<script src="../src/core.devoted.js" type="text/javascript"></script>
+	<script src="../src/math.devoted.js" type="text/javascript"></script>
+	<script src="../src/render.devoted.js" type="text/javascript"></script>
+	<script src="../src/preload.devoted.js" type="text/javascript"></script>
+	<script src="../src/graphics.devoted.js" type="text/javascript"></script>
+
+	
+</head>
+
+<body>
+	<canvas id="sprites"></canvas>
+</body>
+</html>
+
+<script type="text/javascript">
+		Devoted.Render.Init({container: "sprites"});
+		var loader = new Devoted.Preload.Loader();
+		var dummy = loader.addImage('img/dummy.png');
+		
+		var sprite;
+		
+		Devoted.Preload.addCompleteListener = function(){
+			console.log('loaded');
+			sprite = new Devoted.Sprite.Sprite(dummy, new Devoted.Math.Vector2(50,50));
+			update();
+		};
+		
+		function update(){
+			sprite.rotation += 0.1;
+			sprite.draw();
+			Devoted.Render.Draw(update);
+		}
+		
+		
+		
+		
+
+		
+
+
+
+	</script>

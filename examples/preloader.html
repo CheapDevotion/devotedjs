@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>DevotedJS | Preloader</title>
+	<script src="../src/core.devoted.js" type="text/javascript"></script>
+	<script src="../src/preload.devoted.js" type="text/javascript"></script>
+
+	
+</head>
+
+<body>
+	<p id="progress"></p>
+	<canvas id="canvas"></canvas>
+</body>
+</html>
+
+<script type="text/javascript">
+		//Using the thinkpixellab.com preloader test urls to test the preloader
+		var loader = new Devoted.Preload.Loader(),
+		baseUrl = 'http://thinkpixellab.com/pxloader' + 
+		        '/slowImage.php?delay=1&time=' + new Date, 
+		soundNames = ['cow', 'pig', 'tractor', 'r2d2', 'dino'],
+		sound, image,
+		text = document.getElementById("progress");
+		
+		
+		// add 50 images to the queue 
+		for(var i=0; i < 50; i++) { 	
+		    loader.addImage(baseUrl + '&i=' + i); 
+			image = loader.addImage("https://www.google.com/images/srpr/logo3w.png");
+			
+		}
+		
+		for(var i=0; i < soundNames.length; i++) { 
+		        url = 'http://thinkpixellab.com/pxloader/audio/' + soundNames[i] + '.ogg'; 
+				sound = loader.addSound(url);
+		} 
+
+		
+		Devoted.Preload.addProgressListener = function(e){
+			text.innerText = e.progress + "%";
+		};
+		
+		Devoted.Preload.addCompleteListener = function(){
+			sound.play();
+			var ctx = document.getElementById('canvas').getContext('2d');
+			ctx.drawImage(image,0,0);
+		};
+		
+		
+
+		
+
+
+
+	</script>
