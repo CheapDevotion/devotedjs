@@ -19,21 +19,29 @@
 </html>
 
 <script type="text/javascript">
+
 		Devoted.Render.Init({container: "sprites"});
 		var loader = new Devoted.Preload.Loader();
 		var dummy = loader.addImage('img/dummy.png');
 		
-		var sprite;
+		var sprite, points = [];
+		var shape = new Devoted.Graphics.Shape();
+		
+		
 		
 		Devoted.Preload.addCompleteListener = function(){
-			console.log('loaded');
-			sprite = new Devoted.Sprite.Sprite(dummy, new Devoted.Math.Vector2(50,50));
+			sprite = new Devoted.Graphics.Sprite(dummy, new Devoted.Math.Vector2(50,50));
 			update();
 		};
 		
 		function update(){
-			sprite.rotation += 0.1;
-			sprite.draw();
+			points = [];
+			shape.drawLine({
+				from: new Devoted.Math.Vector2(10,10),
+				to: new Devoted.Math.Vector2(80,80),
+				lineWidth:10,
+				lineCap:"round"
+			});
 			Devoted.Render.Draw(update);
 		}
 		
