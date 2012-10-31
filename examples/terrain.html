@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>DevotedJS | Sprites</title>
+	<script src="../src/core.devoted.js" type="text/javascript"></script>
+	<script src="../src/math.devoted.js" type="text/javascript"></script>
+	<script src="../src/render.devoted.js" type="text/javascript"></script>
+	<script src="../src/preload.devoted.js" type="text/javascript"></script>
+	<script src="../src/graphics.devoted.js" type="text/javascript"></script>
+	<script src="../src/terrain.devoted.js" type="text/javascript"></script>
+
+	
+</head>
+
+<body>
+	<canvas id="terrain"></canvas>
+</body>
+</html>
+
+<script type="text/javascript">
+
+		Devoted.Render.Init({container: "terrain", width:screen.width, height: screen.height - 200});
+
+		var ctx = Devoted.Render.context;
+		var canvas = Devoted.Render.canvas;
+		var terrain = new Terrain(40);
+		terrain.generateUsingMidPoint(50,0.8);
+
+
+
+		function update(){
+			ctx.beginPath();
+			ctx.moveTo(0, canvas.height);
+			ctx.lineTo(0, canvas.height - 200);
+			for (var i=0;i<terrain.points.length;i++){
+				ctx.lineTo(i * (canvas.width / terrain.points.length), canvas.height - 200 + terrain.points[i]);
+			}
+			ctx.lineTo(canvas.width, canvas.height - 200);
+			ctx.lineTo(canvas.width, canvas.height);
+			ctx.closePath();
+			ctx.fill();
+
+		}
+
+		update();
+
+		
+		
+		
+		
+
+		
+
+
+
+	</script>
